@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import '../flutter_expandable_fab.dart';
 
 /// The type of behavior of this widget.
-enum ExpandableFabType { fan, up, side }
+enum ExpandableFabType { fan, up, side, down }
 
 /// The position options for the FAB on the screen.
-enum ExpandableFabPos { right, left, center }
+enum ExpandableFabPos { right, left, center, topRight }
 
 /// Animation Type
 enum ExpandableFabAnimation { none, rotate }
@@ -248,26 +248,35 @@ class ExpandableFabState extends State<ExpandableFab>
         if (geometry == null) {
           if (scaffold == null) {
             double dx = 0;
+            double dy = 16;
             if (widget.pos == ExpandableFabPos.right) {
               dx = 16;
             } else if (widget.pos == ExpandableFabPos.left) {
               dx = -16;
+            } else if (widget.pos == ExpandableFabPos.topRight) {
+              dx = 16;
             }
-            return _buildButtons(Offset(dx, 16));
+            return _buildButtons(Offset(dx, dy));
           } else {
             return const SizedBox.shrink();
           }
         }
         double x = 0;
-        if (widget.pos == ExpandableFabPos.right) {
-          x = kFloatingActionButtonMargin + geometry.minInsets.right;
-        } else if (widget.pos == ExpandableFabPos.left) {
-          x = -kFloatingActionButtonMargin - geometry.minInsets.left;
-        }
+        double y = 0;
         final bottomContentHeight =
             geometry.scaffoldSize.height - geometry.contentBottom;
-        final y = kFloatingActionButtonMargin +
-            math.max(geometry.minViewPadding.bottom, bottomContentHeight);
+        if (widget.pos == ExpandableFabPos.right) {
+          x = kFloatingActionButtonMargin + geometry.minInsets.right;
+          y = kFloatingActionButtonMargin +
+              math.max(geometry.minViewPadding.bottom, bottomContentHeight);
+        } else if (widget.pos == ExpandableFabPos.left) {
+          x = -kFloatingActionButtonMargin - geometry.minInsets.left;
+          y = kFloatingActionButtonMargin +
+              math.max(geometry.minViewPadding.bottom, bottomContentHeight);
+        } else if (widget.pos == ExpandableFabPos.topRight) {
+          x = kFloatingActionButtonMargin + geometry.minInsets.right;
+          y = -kFloatingActionButtonMargin - geometry.minInsets.top;
+        }
         if (offset != Offset(x, y)) {
           offset = Offset(x, y);
           cache = _buildButtons(offset!);
@@ -288,6 +297,10 @@ class ExpandableFabState extends State<ExpandableFab>
       case ExpandableFabPos.center:
         alignment = Alignment.bottomCenter;
         break;
+      case ExpandableFabPos.topRight:
+        alignment = Alignment.topRight;
+        break;
+
       default:
         alignment = Alignment.bottomRight;
     }
@@ -370,6 +383,11 @@ class ExpandableFabState extends State<ExpandableFab>
             screenSize.width / 2 - _closeButtonBuilder.size / 2,
             offset.dy + buttonOffset);
         break;
+      case ExpandableFabPos.topRight:
+        final screen = MediaQuery.of(context);
+        totalOffset = Offset(kFloatingActionButtonMargin,
+            screen.size.height - _closeButtonBuilder.size - widget.distance);
+        break;
       default:
         totalOffset +=
             widget.childrenOffset + Offset(buttonOffset, buttonOffset);
@@ -385,6 +403,9 @@ class ExpandableFabState extends State<ExpandableFab>
           } else {
             dir = widget.fanAngle + half;
           }
+          if (widget.pos == ExpandableFabPos.topRight) {
+            dir -= 90;
+          }
           if (widget.pos == ExpandableFabPos.center) {
             dir += 45;
           }
@@ -396,6 +417,10 @@ class ExpandableFabState extends State<ExpandableFab>
           break;
         case ExpandableFabType.side:
           dir = 0;
+          dist = widget.distance * (i + 1);
+          break;
+        case ExpandableFabType.down:
+          dir = 270;
           dist = widget.distance * (i + 1);
           break;
       }
