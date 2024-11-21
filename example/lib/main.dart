@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        useMaterial3: true,
+        useMaterial3: false,
         colorSchemeSeed: Colors.blue,
       ),
       scaffoldMessengerKey: scaffoldKey,
@@ -71,14 +71,37 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // bottomNavigationBar: BottomNavigationBar(
+      //   type: BottomNavigationBarType.fixed,
+      //   currentIndex: 2,
+      //   items: const <BottomNavigationBarItem>[
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.more_horiz),
+      //       label: "test",
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.more_horiz),
+      //       label: "test",
+      //       activeIcon: Icon(Icons.more_horiz),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.more_horiz),
+      //       label: "test",
+      //       activeIcon: Icon(Icons.more_horiz),
+      //     ),
+      //   ],
+      //   selectedFontSize: 12,
+      //   unselectedFontSize: 10,
+      //   onTap: (value) {},
+      // ),
       body: CounterWidget(),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
-        key: _key,
+        //key: _key,
         // duration: const Duration(milliseconds: 500),
-        // distance: 200.0,
-        // type: ExpandableFabType.up,
-        // pos: ExpandableFabPos.left,
+        distance: 100.0,
+        type: ExpandableFabType.down,
+        pos: ExpandableFabPos.topRight,
         // childrenOffset: const Offset(0, 20),
         // childrenAnimation: ExpandableFabAnimation.none,
         // fanAngle: 40,
@@ -120,7 +143,7 @@ class _FirstPageState extends State<FirstPage> {
           debugPrint('afterClose');
         },
         children: [
-          FloatingActionButton.small(
+          FloatingActionButton(
             // shape: const CircleBorder(),
             heroTag: null,
             child: const Icon(Icons.edit),
@@ -131,7 +154,7 @@ class _FirstPageState extends State<FirstPage> {
               scaffoldKey.currentState?.showSnackBar(snackBar);
             },
           ),
-          FloatingActionButton.small(
+          FloatingActionButton(
             // shape: const CircleBorder(),
             heroTag: null,
             child: const Icon(Icons.search),
@@ -140,7 +163,7 @@ class _FirstPageState extends State<FirstPage> {
                   MaterialPageRoute(builder: ((context) => const NextPage())));
             },
           ),
-          FloatingActionButton.small(
+          FloatingActionButton(
             // shape: const CircleBorder(),
             heroTag: null,
             child: const Icon(Icons.share),

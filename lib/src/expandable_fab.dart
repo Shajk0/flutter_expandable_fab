@@ -385,8 +385,7 @@ class ExpandableFabState extends State<ExpandableFab>
         break;
       case ExpandableFabPos.topRight:
         final screen = MediaQuery.of(context);
-        totalOffset = Offset(kFloatingActionButtonMargin,
-            screen.size.height - _closeButtonBuilder.size - widget.distance);
+        totalOffset += Offset(0, screen.size.height - _closeButtonBuilder.size);
         break;
       default:
         totalOffset +=
